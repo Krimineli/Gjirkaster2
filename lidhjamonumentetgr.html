@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gjirokastër Attractions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fadeIn 2s ease-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px gray;
+            border-radius: 10px;
+            animation: slideIn 1.5s ease-out;
+        }
+        @keyframes slideIn {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .link-item {
+            margin: 20px;
+            flex-basis: 30%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .link-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            border: 3px solid #2c3e50;
+            transition: transform 0.3s ease;
+        }
+        img:hover {
+            transform: scale(1.1);
+        }
+        p {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+        p:hover {
+            color: #2c3e50;
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .link-item {
+                flex-basis: 80%;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>Εξερευνήστε το Gjirokastër</header>
+    <div class="container">
+        <div class="link-item">
+            <a href="websitekalajagr.html">
+                <img src="OIP.jpeg" alt="Κάστρο Gjirokastër">
+            </a>
+            <p><strong>Κάστρο Gjirokastër</strong> - Κάντε κλικ στην εικόνα για να μάθετε περισσότερα!</p>
+        </div>
+        <div class="link-item">
+            <a href="websitepazarigr.html">
+                <img src="download.jpeg" alt="Παλιό παζάρι του Gjirokastër">
+            </a>
+            <p><strong>Παλιό παζάρι του Gjirokastër</strong> - Κάντε κλικ στην εικόνα για να μάθετε περισσότερα!</p>
+        </div>
+        <div class="link-item">
+            <a href="websiteetnografikgr.html">
+                <img src="hoxha.jpeg" alt="Εθνογραφικό Μουσείο Gjirokastër">
+            </a>
+            <p><strong>Εθνογραφικό Μουσείο Gjirokastër</strong> - Κάντε κλικ στην εικόνα για να μάθετε περισσότερα!</p>
+        </div>
+    </div>
+    <a href="perfundimigr.html">
+        <img src="back.png" alt="Back" style="height:20vh;width:10vw">
+    </a>
+    <footer>&copy; 2025 Gjirokastër Guide | All rights reserved</footer>
+</body>
+</html>

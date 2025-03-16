@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Old Bazaar of Gjirokastra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        header {
+            background: #8B4513;
+            color: white;
+            padding: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px gray;
+            border-radius: 10px;
+        }
+        img {
+            width: 60%;
+            max-width: 800px;
+            border-radius: 10px;
+            border: 5px solid #8B4513;
+            margin-top: 20px;
+        }
+        .info {
+            text-align: left;
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+        footer {
+            background: #8B4513;
+            color: white;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        #speak-button {
+            margin: 20px;
+            cursor: pointer;
+            width: 60px;
+            position: absolute;
+            top: 20px;
+            left: 20px; /* Microphone on the left side */
+        }
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
+        #take-me-there {
+            margin-top: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            color: #8B4513;
+            text-decoration: underline;
+            font-weight: bold;
+            background-color: #f4f4f4;
+            padding: 10px 20px;
+            border: 2px solid #8B4513;
+            border-radius: 5px;
+        }
+        #take-me-there:hover {
+            background-color: #8B4513;
+            color: white;
+        }
+    </style>
+    <!-- Include Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <header>Old Bazaar of Gjirokastra</header>
+    <div class="container">
+        <!-- Map placed at the top -->
+        <div id="map"></div>
+
+        <img src="download.jpeg" alt="Old Bazaar of Gjirokastra">
+        <div class="info">
+            <h2>About the Old Bazaar</h2>
+            <p>The Old Bazaar of Gjirokastra is a historical market dating back to the Ottoman era. Located in the heart of the city, it has been a center for trade, culture, and craftsmanship for centuries.</p>
+            <h2>History</h2>
+            <p>Originally built in the 17th century, the bazaar has undergone various transformations due to fires and reconstructions. Despite these changes, it retains its traditional charm, with cobblestone streets and characteristic buildings with stone roofs.</p>
+            <h2>Main Attractions</h2>
+            <ul>
+                <li>Handcrafted souvenirs and traditional Albanian goods.</li>
+                <li>Local artisans displaying woodwork, ceramics, and textiles.</li>
+                <li>Traditional cafes and restaurants serving authentic cuisine.</li>
+                <li>Beautiful Ottoman-era architecture and historic buildings.</li>
+                <li>A lively market atmosphere with local vendors and street performances.</li>
+            </ul>
+            <h2>Interesting Facts</h2>
+            <p>The Old Bazaar is famous for its well-preserved Ottoman design and its role in connecting traders from various regions. Many of the shops are family-run businesses passed down through generations.</p>
+            <p>It is also a major tourist attraction, offering visitors a glimpse into Albania's rich heritage and local craftsmanship.</p>
+            <h2>Visitor Information</h2>
+            <p>The bazaar is open daily, with the best times to visit being in the morning or late afternoon. Guided tours are available, and it is a must-visit destination for anyone exploring Gjirokastra.</p>
+        </div>
+
+        <!-- "Take me there" button placed below the map -->
+        <div id="take-me-there" onclick="takeMeThere()">
+            Take me there
+        </div>
+
+        <!-- Microphone button -->
+        <img id="speak-button" src="a7f5a253d2b3ff0e994ecbac333f8a406bf598d27f812e18e69070fc1d4ddf4e-removebg-preview.png" alt="Microphone">
+
+        <a href="lidhjamonumentet.html">
+            <img src="back.png" alt="Back" style="height:20vh;width:10vw">
+        </a>
+    </div>
+    <footer>&copy; 2025 Gjirokastra Old Bazaar | All rights reserved</footer>
+
+    <script>
+        let speech = new SpeechSynthesisUtterance();
+        let isSpeaking = false;
+
+        speech.rate = 1.2;
+        speech.pitch = 1;
+        speech.lang = "sq-AL";
+
+        function setMaleVoice() {
+            let voices = speechSynthesis.getVoices();
+            let maleVoice = voices.find(voice => voice.name.includes("Male") || voice.name.includes("Google UK English Male"));
+            if (maleVoice) {
+                speech.voice = maleVoice;
+            }
+        }
+
+        speechSynthesis.onvoiceschanged = setMaleVoice;
+
+        document.getElementById("speak-button").addEventListener("click", function () {
+            if (isSpeaking) {
+                speechSynthesis.cancel();
+                isSpeaking = false;
+            } else {
+                speech.text = document.querySelector(".info").innerText;
+                speechSynthesis.speak(speech);
+                isSpeaking = true;
+            }
+        });
+
+        function takeMeThere() {
+            alert("Follow me!");
+        }
+
+        // Leaflet map initialization
+        var map = L.map('map').setView([40.0737, 20.1411], 15); // Coordinates for the Old Bazaar of Gjirokastra
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([40.0737, 20.1411]).addTo(map)
+            .bindPopup("<b>Old Bazaar of Gjirokastra</b><br/>A historic place full of tradition.")
+            .openPopup();
+    </script>
+</body>
+</html>

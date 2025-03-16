@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <title>Gjirokastër Castle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(120deg, #4A90E2, #50E3C2);
+            text-align: center;
+            color: white;
+        }
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            font-size: 28px;
+            text-transform: uppercase;
+            animation: fadeIn 2s ease-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px gray;
+            border-radius: 10px;
+            color: black;
+            animation: slideIn 1.5s ease-out;
+        }
+        @keyframes slideIn {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            animation: fadeIn 3s ease-out;
+        }
+        .top-section img {
+            width: 48px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .top-section img:hover {
+            transform: scale(1.1);
+        }
+        .main-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        #map {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+            border-radius: 10px;
+            animation: fadeIn 2.5s ease-out;
+        }
+        #take-me-there {
+            margin-top: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: 0.3s;
+            animation: fadeIn 3.5s ease-out;
+        }
+        #take-me-there:hover {
+            background: #34495e;
+        }
+        .info {
+            text-align: left;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-top: 20px;
+            animation: fadeIn 4s ease-out;
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>Gjirokastër Castle</header>
+    <div class="container">
+        <div class="top-section">
+            <img id="speak-button" src="a7f5a253d2b3ff0e994ecbac333f8a406bf598d27f812e18e69070fc1d4ddf4e-removebg-preview.png" alt="Microphone">
+            <img class="main-image" src="OIP.jpeg" alt="Gjirokastër Castle">
+        </div>
+
+        <div id="map"></div>
+        <div id="take-me-there" onclick="takeMeThere()">Take me there</div>
+        
+        <div class="info">
+            <h2>About Gjirokastër Castle</h2>
+            <p>Gjirokastër Castle is a fortress in Gjirokastër, Albania, with a history dating back to the 12th century. It is one of the largest castles in the Balkans and offers stunning views of the city and the Drino valley.</p>
+            <h2>History</h2>
+            <p>The castle has been used as a military fortress, a prison, and now serves as a museum displaying weapons and historical artifacts from different eras. It played an important role in the history of Albania and is a symbol of resilience and cultural heritage. The castle has been expanded and modified over the centuries, with contributions from various ruling powers, including the Ottoman Empire.</p>
+            <h2>Attractions</h2>
+            <ul>
+                <li>National Armament Museum - Showcases weapons from different time periods.</li>
+                <li>Castle Prison - Used during the communist era for political prisoners.</li>
+                <li>World War II American Plane - A mysterious relic with debated origins.</li>
+                <li>Beautiful panoramic views of Gjirokastër and the surrounding mountains.</li>
+                <li>Annual Gjirokastër National Folklore Festival, a major cultural event.</li>
+                <li>Clock Tower - One of the most iconic structures inside the castle.</li>
+                <li>Underground Water Reservoirs - Historically used to store water during sieges.</li>
+            </ul>
+            <h2>Interesting Facts</h2>
+            <p>The castle is known for its eerie tunnels and underground passages, adding to its mysterious charm. It also houses a clock tower that has withstood the test of time, offering a glimpse into the architectural heritage of the region.</p>
+            <p>Legends say that the castle was once the site of secret meetings and military strategies planned in hidden rooms. The castle has survived numerous invasions, making it a key historical site in Albania.</p>
+            <h2>Visitor Information</h2>
+            <p>The castle is open to visitors year-round, with guided tours available for those interested in its rich history. It is recommended to visit during sunset to enjoy the breathtaking views over Gjirokastër.</p>
+        </div>
+
+        <a href="lidhjamonumentet.html">
+            <img src="back.png" alt="Back" style="height:20vh;width:10vw">
+        </a>
+    </div>
+
+    <footer>&copy; 2025 Gjirokastër Castle | All rights reserved</footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([40.0756, 20.1414], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([40.0756, 20.1414]).addTo(map).bindPopup('Gjirokastër Castle').openPopup();
+
+        let speech = new SpeechSynthesisUtterance();
+        speech.rate = 1.2;
+        speech.pitch = 1;
+        speech.lang = "en-US";
+
+        let isSpeaking = false; // Flag to check if speaking
+
+        document.getElementById("speak-button").addEventListener("click", function () {
+            if (isSpeaking) {
+                // If speaking, stop the audio
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+            } else {
+                // If not speaking, start the audio
+                speech.text = document.querySelector(".info").innerText;
+                speechSynthesis.speak(speech);
+                isSpeaking = true;
+            }
+        });
+
+        function takeMeThere() {
+            alert("Follow me!");
+        }
+    </script>
+</body>
+</html>

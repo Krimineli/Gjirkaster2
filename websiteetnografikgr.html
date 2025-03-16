@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <title>Εθνογραφικό Μουσείο</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(120deg, #4A90E2, #50E3C2);
+            text-align: center;
+            color: white;
+        }
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            font-size: 28px;
+            text-transform: uppercase;
+            animation: fadeIn 2s ease-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px gray;
+            border-radius: 10px;
+            color: black;
+            animation: slideIn 1.5s ease-out;
+        }
+        @keyframes slideIn {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            animation: fadeIn 3s ease-out;
+        }
+        .top-section img {
+            width: 48px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .top-section img:hover {
+            transform: scale(1.1);
+        }
+        .main-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        #map {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+            border-radius: 10px;
+            animation: fadeIn 2.5s ease-out;
+        }
+        #take-me-there {
+            margin-top: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: 0.3s;
+            animation: fadeIn 3.5s ease-out;
+        }
+        #take-me-there:hover {
+            background: #34495e;
+        }
+        .info {
+            text-align: left;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-top: 20px;
+            animation: fadeIn 4s ease-out;
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>Εθνογραφικό Μουσείο</header>
+    <div class="container">
+        <div class="top-section">
+            <!-- Microphone Button -->
+            <img id="speak-button" src="a7f5a253d2b3ff0e994ecbac333f8a406bf598d27f812e18e69070fc1d4ddf4e-removebg-preview.png" alt="Μικρόφωνο">
+            <!-- Main Image -->
+            <img class="main-image" src="hoxha.jpeg" alt="Κάστρο Γκιροκάστρας">
+        </div>
+
+        <!-- Χάρτης -->
+        <div id="map"></div>
+        
+        <!-- "Πάρε με εκεί" Κουμπί -->
+        <div id="take-me-there" onclick="takeMeThere()">Πάρε με εκεί</div>
+
+        <!-- Τμήμα Πληροφοριών -->
+        <div class="info">
+            <h2>Σχετικά με το Εθνογραφικό Μουσείο</h2>
+            <p>Το Εθνογραφικό Μουσείο στη Γκιροκάστρα είναι ένας πολιτιστικός θησαυρός που προσφέρει πληροφορίες για την παραδοσιακή ζωή, την ιστορία και τα έθιμα της Αλβανίας. Βρίσκεται στο γενέθλιο σπίτι του Ενβέρ Χότζα, του πρώην ηγέτη της Αλβανίας.</p>
+            <h2>Ιστορία</h2>
+            <p>Το μουσείο κατασκευάστηκε στον τόπο του πρώην σπιτιού του Ενβέρ Χότζα, μετά την καταστροφή του προηγούμενου. Δείχνει τον παραδοσιακό τρόπο ζωής των ανθρώπων της Γκιροκάστρας, με εκθέματα που περιλαμβάνουν οικιακά αντικείμενα, ρούχα και είδη από διάφορες περιόδους.</p>
+            <h2>Αξιοθέατα</h2>
+            <ul>
+                <li>Παραδοσιακά αλβανικά έπιπλα και οικιακά αντικείμενα.</li>
+                <li>Εκθέματα τοπικών χειροτεχνιών, όπως υφάσματα, ξυλουργική και κεραμική.</li>
+                <li>Απεικονίσεις δωματίων που δείχνουν τον τρόπο ζωής των πλούσιων οικογενειών της Γκιροκάστρας.</li>
+                <li>Ιστορικές φωτογραφίες και έγγραφα που αποτυπώνουν την πολιτιστική κληρονομιά της Αλβανίας.</li>
+                <li>Ένα όμορφο αρχιτεκτονικό παράδειγμα παραδοσιακού σπιτιού της Γκιροκάστρας.</li>
+            </ul>
+            <h2>Ενδιαφέροντα Στοιχεία</h2>
+            <p>Το μουσείο βρίσκεται σε μια ανακαινισμένη εκδοχή του γενέθλιου σπιτιού του Ενβέρ Χότζα, σχεδιασμένο να μοιάζει με παραδοσιακό σπίτι πλούσιας οικογένειας παρά με πολιτικό μνημείο.</p>
+            <p>Η συλλογή του μουσείου περιλαμβάνει όμορφα διακοσμημένα ταβάνια, χειροποίητα έπιπλα και ιστορικά υφάσματα που αντανακλούν την πλούσια πολιτιστική κληρονομιά της περιοχής.</p>
+            <h2>Πληροφορίες Επισκεπτών</h2>
+            <p>Το μουσείο είναι ανοιχτό κάθε μέρα και προσφέρει καθοδηγούμενους περιπάτους. Είναι ένα από τα πιο αξιόλογα αξιοθέατα στη Γκιροκάστρα για όσους ενδιαφέρονται για τον αλβανικό πολιτισμό και την ιστορία.</p>
+        </div>
+
+        <!-- Πίσω Κουμπί -->
+        <a href="lidhjamonumentetgr.html">
+            <img src="back.png" alt="Πίσω" style="height:20vh;width:10vw">
+        </a>
+    </div>
+
+    <!-- Υποσέλιδο -->
+    <footer>&copy; 2025 Εθνογραφικό Μουσείο | Όλα τα δικαιώματα διατηρούνται</footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        // Ρύθμιση Χάρτη
+        var map = L.map('map').setView([40.0756, 20.1414], 15); // Συντεταγμένες για το Εθνογραφικό Μουσείο
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([40.0756, 20.1414]).addTo(map).bindPopup('Εθνογραφικό Μουσείο, ένας μοναδικός χώρος').openPopup();
+
+        // Ρύθμιση Ομιλίας
+        let speech = new SpeechSynthesisUtterance();
+        speech.rate = 1.2;
+        speech.pitch = 1;
+        speech.lang = "el-GR";
+        let isSpeaking = false;
+
+        // Ακροατής Γεγονότων για το Κουμπί Μικροφώνου
+        document.getElementById("speak-button").addEventListener("click", function () {
+            if (isSpeaking) {
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+            } else {
+                speech.text = document.querySelector(".info").innerText;
+                speechSynthesis.speak(speech);
+                isSpeaking = true;
+            }
+        });
+
+        // Λειτουργία "Πάρε με εκεί"
+        function takeMeThere() {
+            alert("Ακολούθησέ με!");
+        }
+    </script>
+</body>
+</html>

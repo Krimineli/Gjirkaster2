@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <title>Etnographic Museum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(120deg, #4A90E2, #50E3C2);
+            text-align: center;
+            color: white;
+        }
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            font-size: 28px;
+            text-transform: uppercase;
+            animation: fadeIn 2s ease-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px gray;
+            border-radius: 10px;
+            color: black;
+            animation: slideIn 1.5s ease-out;
+        }
+        @keyframes slideIn {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            animation: fadeIn 3s ease-out;
+        }
+        .top-section img {
+            width: 48px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .top-section img:hover {
+            transform: scale(1.1);
+        }
+        .main-image {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        #map {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+            border-radius: 10px;
+            animation: fadeIn 2.5s ease-out;
+        }
+        #take-me-there {
+            margin-top: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: 0.3s;
+            animation: fadeIn 3.5s ease-out;
+        }
+        #take-me-there:hover {
+            background: #34495e;
+        }
+        .info {
+            text-align: left;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-top: 20px;
+            animation: fadeIn 4s ease-out;
+        }
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>Etnographic Museum</header>
+    <div class="container">
+        <div class="top-section">
+            <!-- Microphone Button -->
+            <img id="speak-button" src="a7f5a253d2b3ff0e994ecbac333f8a406bf598d27f812e18e69070fc1d4ddf4e-removebg-preview.png" alt="Microphone">
+            <!-- Main Image -->
+            <img class="main-image" src="hoxha.jpeg" alt="Castle of Gjirokastra">
+        </div>
+
+        <!-- Map -->
+        <div id="map"></div>
+        
+        <!-- "Take me there" Button -->
+        <div id="take-me-there" onclick="takeMeThere()">Take me there</div>
+
+        <!-- Information Section -->
+        <div class="info">
+            <h2>About the Etnographic Museum</h2>
+            <p>The Etnographic Museum in Gjirokastra is a cultural treasure offering information about traditional life, history, and customs of Albania. It is located in the birthplace of Enver Hoxha, the former leader of Albania.</p>
+            <h2>History</h2>
+            <p>The museum was built on the site of Enver Hoxha's former house, after the destruction of the previous one. It shows the traditional way of life of the people of Gjirokastra, with exhibits including household objects, clothing, and items from various periods.</p>
+            <h2>Attractions</h2>
+            <ul>
+                <li>Traditional Albanian furniture and household items.</li>
+                <li>Exhibits of local crafts such as textiles, woodwork, and pottery.</li>
+                <li>Depictions of rooms illustrating the lifestyle of the wealthy families of Gjirokastra.</li>
+                <li>Historical photographs and documents reflecting Albania's cultural heritage.</li>
+                <li>A beautiful architectural example of a traditional Gjirokastra house.</li>
+            </ul>
+            <h2>Interesting Facts</h2>
+            <p>The museum is located in a renovated version of Enver Hoxha's birthplace, designed to resemble a traditional house of a wealthy family rather than a political monument.</p>
+            <p>The museum's collection includes beautifully decorated ceilings, handcrafted furniture, and historical textiles that reflect the rich cultural heritage of the area.</p>
+            <h2>Visitor Information</h2>
+            <p>The museum is open every day and offers guided tours. It is one of the must-visit attractions in Gjirokastra for those interested in Albanian culture and history.</p>
+        </div>
+
+        <!-- Back Button -->
+        <a href="lidhjamonumentet.html">
+            <img src="back.png" alt="Back" style="height:20vh;width:10vw">
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>&copy; 2025 Etnographic Museum | All rights reserved</footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        // Map Setup
+        var map = L.map('map').setView([40.0756, 20.1414], 15); // Coordinates for Etnographic Museum
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([40.0756, 20.1414]).addTo(map).bindPopup('Etnographic Museum, a unique place').openPopup();
+
+        // Speech Synthesis Setup
+        let speech = new SpeechSynthesisUtterance();
+        speech.rate = 1.2;
+        speech.pitch = 1;
+        speech.lang = "en-US";
+        let isSpeaking = false;
+
+        // Event Listener for Microphone Button
+        document.getElementById("speak-button").addEventListener("click", function () {
+            if (isSpeaking) {
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+            } else {
+                speech.text = document.querySelector(".info").innerText;
+                speechSynthesis.speak(speech);
+                isSpeaking = true;
+            }
+        });
+
+        // "Take me there" Function
+        function takeMeThere() {
+            alert("Follow me!");
+        }
+    </script>
+</body>
+</html>
